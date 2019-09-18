@@ -46,8 +46,8 @@ def generate_config():
     :return: model_params dictionary
     """
     model_params = {'spatial_dropout': [0, 0.1,0.2,0.4,0.5],
-                         'num_conv_blocks': [1,2,3],
-                         'num_conv_filters': [10,30,50,70],
+                         'num_conv_blocks': [1,2,3,5,7,9],
+                         'num_conv_filters': [10,50,80,100],
                          'filter_size': [3,5,7],
                          'num_dense_layers': [1,2],
                          'num_dense_neurons': [10,50,80],
