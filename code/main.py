@@ -9,6 +9,7 @@ from sklearn import decomposition, ensemble
 import pandas, numpy, string
 from tensorflow.keras.preprocessing import text, sequence
 from tensorflow.keras import layers, models, optimizers
+from tensorflow.keras.callbacks import Callback, EarlyStopping, ModelCheckpoint, ReduceLROnPlateau, TensorBoard
 import tensorflow as tf
 
 try:
@@ -17,6 +18,7 @@ except Exception as e:
     print(e)
 
 print(tf.__version__)
+
 
 # Read the tweets generated via GPT-2 model and the real tweets
 trainDF = pd.read_csv('tweet_labels.csv')
@@ -53,7 +55,7 @@ def generate_config():
                          'num_dense_neurons': [10,50,80],
                          'activation_func': ['relu', 'elu', 'selu', 'tanh'],
                          'dense_dropout': [0, 0.2, 0.5],
-                         'epochs': [10],
+                         'epochs': [1],
                          'batch_size':[10, 20],
                          'learning_rate': [0.1, 0.01, 0.001, 0.0001, 0.00001]
                          }
@@ -62,8 +64,26 @@ def generate_config():
         model_params[k] = random_select_from_list(v)
     return model_params
 
+# If you want to run the model with Baseline params, switch the USE_BASELINE_PARAMS = False
+USE_BASELINE_PARAMS = False
+
 # This is the model_param dictionary
-model_params_conv = generate_config()
+if USE_BASELINE_PARAMS:
+    model_params_conv = {'spatial_dropout': 0,
+                    'num_conv_blocks': 3,
+                    'num_conv_filters': 32,
+                    'filter_size': 3,
+                    'num_dense_layers': 1,
+                    'num_dense_neurons': 50,
+                    'activation_func': 'relu',
+                    'dense_dropout': 0.1,
+                    'epochs': 20,
+                    'batch_size': 20,
+                    'learning_rate': 0.001
+                    }
+else:
+    model_params_conv = generate_config()
+
 
 # Log params for foundations to track the job run parameters
 try:
@@ -90,39 +110,48 @@ def save_plot_all(inp_list, fig_name):
             ct+=1
     plt.savefig(f'performance_plots.png')
 
-def train_model(classifier, feature_vector_train, label, feature_vector_valid, valid_y,is_neural_net=False, params={}):
+
+def train_model(classifier, feature_vector_train, label, feature_vector_valid, valid_y):
     # fit the training dataset on the classifier
-    if is_neural_net:
-        history = classifier.fit(feature_vector_train, label,
-                       epochs=model_params_conv['epochs'],
-                       validation_split=0.2,
-                       batch_size = model_params_conv['batch_size'])
+    callbacks = []
+    tb = TensorBoard(log_dir='tflogs', write_graph=True, write_grads=False)
+    callbacks.append(tb)
+    es = EarlyStopping(monitor='val_loss', mode='min', patience=5, min_delta=0.0001,
+                       verbose=1)
+    callbacks.append(tb)
+    callbacks.append(es)
 
-        history_dict = history.history
-        train_loss = history_dict['loss']
-        val_loss = history_dict['val_loss']
-        train_acc = history_dict['acc']
-        val_acc = history_dict['val_acc']
-        inp_list = [train_loss, val_loss, train_acc, val_acc]
-        fig_name = ['train_loss', 'val_loss', 'train_acc', 'val_acc']
-        save_plot_all(inp_list, fig_name)
+    rp = ReduceLROnPlateau(monitor='val_loss', factor=0.6, patience=1,
+                           verbose=1)
+    callbacks.append(rp)
+    history = classifier.fit(feature_vector_train, label,
+                   epochs=model_params_conv['epochs'],
+                   validation_split=0.2,
+                   batch_size = model_params_conv['batch_size'],
+                   callbacks=callbacks)
 
-        try:
-            foundations.save_artifact('performance_plots.png', key='performance_plots')
-        except Exception as e:
-            print(e)
-    else:
-        classifier.fit(feature_vector_train, label)
+    history_dict = history.history
+    print(f"There are the keys of history_dict {np.array(history_dict.keys())}")
+    train_loss = history_dict['loss']
+    val_loss = history_dict['val_loss']
+    train_acc = history_dict['accuracy']
+    val_acc = history_dict['val_accuracy']
+    inp_list = [train_loss, val_loss, train_acc, val_acc]
+    fig_name = ['train_loss', 'val_loss', 'train_acc', 'val_acc']
+    save_plot_all(inp_list, fig_name)
+
+    try:
+        foundations.save_artifact('performance_plots.png', key='performance_plots')
+    except Exception as e:
+        print(e)
 
     # predict the labels on validation dataset
     predictions = classifier.predict(feature_vector_valid)
 
-    if is_neural_net:
-        #round probabilities to 1 and 0
-        predictions = predictions.round()
+    #round probabilities to 1 and 0
+    predictions = predictions.round()
 
-        return metrics.accuracy_score(predictions, valid_y)
-    return metrics.accuracy_score(predictions, valid_y)
+    return metrics.accuracy_score(predictions, valid_y), predictions, classifier
 
 
 # Words embedding matrix is obtained from the wiki-news-300d-1M.vec
@@ -194,7 +223,7 @@ def create_cnn(model_params):
 
     # Compile the model
     model = models.Model(inputs=input_layer, outputs=output_layer2)
-    model.compile(optimizer=optimizers.Adam(lr=model_params['learning_rate'], decay=0.0001 / 30), loss='binary_crossentropy',
+    model.compile(optimizer=optimizers.Adam(lr=model_params['learning_rate'], decay=model_params['learning_rate'] / model_params['epochs']), loss='binary_crossentropy',
                   metrics=['accuracy'])
 
     return model
@@ -203,9 +232,9 @@ def create_cnn(model_params):
 # Initialize the model
 classifier = create_cnn(model_params_conv)
 # Train the model
-accuracy = train_model(classifier, train_seq_x, train_y, valid_seq_x, valid_y,is_neural_net=True)
+accuracy, val_predictions, trained_model = train_model(classifier, train_seq_x, train_y, valid_seq_x, valid_y)
 # Evaluate the model
-print("CNN, Word Embeddings",  accuracy)
+print("Validation Accuracy of Trained CNN Model",  accuracy)
 
 # Log metrics to track in foundations
 try:
@@ -213,3 +242,10 @@ try:
 except Exception as e:
     print(e)
 
+
+# save the trained model that can be put in production if needed
+trained_model.save('saved_tf_model.h5')
+try:
+    foundations.save_artifact('saved_tf_model.h5', key='saved_tf_model')
+except Exception as e:
+    print(e)

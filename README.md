@@ -49,7 +49,13 @@ CD into the "code" direcotry in order to run `main.py`. You may run the job with
 |      Run multiple ML experiments    | python submit_jobs.py                   | To run and track multiple ML experiments                 |
 
 
-Below are some screenshots of running foundations.
+## Baseline Model
+Around line 68 in `main.py`, we have included a flag `USE_BASELINE_PARAMS = False` so that you can run experiments with random hyperparameters. But, in case you want to run the baseline model, just set this flag to be `True`.
+
+The baseline validation accuracy is approx. 75%. But, with some ML experiments, this baseline accuracy can be further improved.
+
+
+Below are some screenshots of running ML experiments with foundations.
 
 ##Run a single job with foundations
 ![](code/images/single_deploy_cli.png)
@@ -63,16 +69,26 @@ Once the job is deployed from the terminal, it can be viewed in Foundations GUI 
 ![](code/images/submit_jobs_cli.png)
 ![](code/images/multiple_experiments_gui.png)
 
-In the GUI, you can see multiple experiments that have finished running along with their performance. In order to view the performance plots, click on the square box at the end of a corresponding row. You should see an artifacts window opening up where you can see the plots as shown below.
+##Foundations Artifacts
+The artifacts lets you save any object you want to track along with the ML experiments. These artifacts are also accessible from the GUI.
+In the GUI, you can see multiple experiments that have finished running along with their performance. In order to view the performance plots, click on the square box at the end of a corresponding row. You should see an artifacts window opening up where you can see the performance_plots.png and saved_model.h5.
+
+Artifacts can also save the trained model that can be used for production or further analysis. In the artifact viewer, you can see `saved_model.h5`, you can download this trained model onto your computer.
+
+![](code/images/artifacts_viewer.png)
+
+In order to see the performance plots while training of model, click on `performance_plots.png`:
 
 ![](code/images/view_artifact_1.png)
 ![](code/images/view_artifact_2.png)
+
+
 
 If you click on `Project Overview`, you will see a plot of model metrics for each ML experiment that was run using Foundations.
 
 ![](code/images/metrics_tracking_per_experiment.png)
 
-So, try running some experiments using Foundations and let us know if you have any feedback, questions or suggestions.
+So, try running some experiments using Foundations and let us know if you have any feedback, questions or suggestions. We would like users to take advantage of Foundations and significantly improve the baseline model performance.
 
 
 
