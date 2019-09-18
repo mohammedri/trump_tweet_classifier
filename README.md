@@ -52,16 +52,16 @@ CD into the "code" direcotry in order to run `main.py`. You may run the job with
 Below are some screenshots of running foundations.
 
 ##Run a single job with foundations
-![](./images/single_deploy_cli.png)
-![](./images/single_job_running_gui.png)
+![](code/images/single_deploy_cli.png)
+![](code/images/single_job_running_gui.png)
 
 
 ##Launch multiple ML experiments with foundations
-![](./images/submit_jobs_cli.png)
-![](./images/multiple_experiments_gui.png)
-![](./images/view_artifact_1.png)
-![](./images/view_artifact_2.png)
-![](./images/metrics_tracking_per_experiment.png)
+![](code/images/submit_jobs_cli.png)
+![](code/images/multiple_experiments_gui.png)
+![](code/images/view_artifact_1.png)
+![](code/images/view_artifact_2.png)
+![](code/images/metrics_tracking_per_experiment.png)
 
 
 
