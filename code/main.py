@@ -1,6 +1,3 @@
-
-import subprocess
-# subprocess.call(["bash","download_files.sh"])
 import os
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 import pandas as pd
@@ -19,43 +16,35 @@ try:
 except Exception as e:
     print(e)
 
-
-
-# In[6]:
-
-
 print(tf.__version__)
 
-
-# In[8]:
-os.listdir('/data')
-
+# Read the tweets generated via GPT-2 model and the real tweets
 trainDF = pd.read_csv('tweet_labels.csv')
-
 trainDF.head()
 
-
-# In[10]:
-
+# Split the data between train and validation
 train_x, valid_x, train_y, valid_y = model_selection.train_test_split(trainDF['tweet'], trainDF['labels'])
 
+# Perform Label Encoding on the targets to convert to 0 and 1
 encoder = preprocessing.LabelEncoder()
 train_y = encoder.fit_transform(train_y)
 valid_y = encoder.transform(valid_y)
 
-
-# In[12]:
-
-
-tfidf_vect = TfidfVectorizer(analyzer='word', token_pattern=r'\w{1,}', max_features=5000)
-tfidf_vect.fit(trainDF['tweet'])
-
-
+# Create model_params from random selection
 def random_select_from_list(valid_value_list):
+    """
+    This function returns a random selection from list
+    :param valid_value_list: list from which a value needs to be sampled
+    :return: a selection from list
+    """
     random_ind = np.random.randint(len(valid_value_list))
     return valid_value_list[random_ind]
 
 def generate_config():
+    """
+    This function generates a random model_params for the neural net
+    :return: model_params dictionary
+    """
     model_params = {'spatial_dropout': [0, 0.1,0.2,0.4,0.5],
                          'num_conv_blocks': [1,2,3],
                          'num_conv_filters': [10,30,50,70],
@@ -73,26 +62,23 @@ def generate_config():
         model_params[k] = random_select_from_list(v)
     return model_params
 
+# This is the model_param dictionary
 model_params_conv = generate_config()
 
+# Log params for foundations to track the job run parameters
 try:
     for k,v in model_params_conv.items():
         foundations.log_param(k, v)
 except Exception as e:
     print(e)
 
-# In[13]:
-
-def save_plot(inp_list, fig_name):
-    plt.figure()
-    plt.plot(inp_list)
-    plt.ylabel(f'{fig_name}')
-    plt.xlabel('epochs')
-    plt.title(f'{fig_name}')
-    plt.savefig(f'{fig_name}.png')
-
-
 def save_plot_all(inp_list, fig_name):
+    """
+    This functions saves the performance plots of the trained model
+    :param inp_list: list of metrics
+    :param fig_name: list of names of metrics
+    :return:
+    """
     fig, ax = plt.subplots(nrows=2, ncols=2)
     ct=0
     for row in ax:
@@ -125,8 +111,6 @@ def train_model(classifier, feature_vector_train, label, feature_vector_valid, v
             foundations.save_artifact('performance_plots.png', key='performance_plots')
         except Exception as e:
             print(e)
-
-
     else:
         classifier.fit(feature_vector_train, label)
 
@@ -141,9 +125,7 @@ def train_model(classifier, feature_vector_train, label, feature_vector_valid, v
     return metrics.accuracy_score(predictions, valid_y)
 
 
-# In[14]:
-
-
+# Words embedding matrix is obtained from the wiki-news-300d-1M.vec
 embeddings_index = {}
 try:
     for i, line in enumerate(open('../data/wiki-news-300d-1M.vec')):
@@ -175,19 +157,13 @@ for word, i in word_index.items():
 train_seq_x = sequence.pad_sequences(token.texts_to_sequences(train_x), maxlen=70)
 valid_seq_x = sequence.pad_sequences(token.texts_to_sequences(valid_x), maxlen=70)
 
-# Just for speed we only take first 500 tweets
-train_seq_x = train_seq_x[:500]
-valid_seq_x = valid_seq_x[:500]
-train_y = train_y[:500]
-valid_y = valid_y[:500]
-
-
-
-
-# In[15]:
-
 
 def create_cnn(model_params):
+    """
+    This function creates a Deep Convolutional Network based on model_params dictionary
+    :param model_params: dict of model_params
+    :return: keras model
+    """
     # Add an Input Layer, expected vectors of 0 and 1, with one vector for each word
     input_layer = layers.Input((70,))
 
@@ -224,10 +200,14 @@ def create_cnn(model_params):
     return model
 
 
+# Initialize the model
 classifier = create_cnn(model_params_conv)
+# Train the model
 accuracy = train_model(classifier, train_seq_x, train_y, valid_seq_x, valid_y,is_neural_net=True)
+# Evaluate the model
 print("CNN, Word Embeddings",  accuracy)
 
+# Log metrics to track in foundations
 try:
     foundations.log_metric('val_accuracy', accuracy)
 except Exception as e:

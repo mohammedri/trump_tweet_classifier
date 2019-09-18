@@ -53,15 +53,26 @@ Below are some screenshots of running foundations.
 
 ##Run a single job with foundations
 ![](code/images/single_deploy_cli.png)
+
+Once the job is deployed from the terminal, it can be viewed in Foundations GUI by going to internet browser - https://localhost:5555.
+
 ![](code/images/single_job_running_gui.png)
 
 
 ##Launch multiple ML experiments with foundations
 ![](code/images/submit_jobs_cli.png)
 ![](code/images/multiple_experiments_gui.png)
+
+In the GUI, you can see multiple experiments that have finished running along with their performance. In order to view the performance plots, click on the square box at the end of a corresponding row. You should see an artifacts window opening up where you can see the plots as shown below.
+
 ![](code/images/view_artifact_1.png)
 ![](code/images/view_artifact_2.png)
+
+If you click on `Project Overview`, you will see a plot of model metrics for each ML experiment that was run using Foundations.
+
 ![](code/images/metrics_tracking_per_experiment.png)
+
+So, try running some experiments using Foundations and let us know if you have any feedback, questions or suggestions.
 
 
 
