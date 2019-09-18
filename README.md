@@ -7,12 +7,13 @@
 # Fake Vs Real Trump Twitter Classifier Using Tensorflow 2.0
 The task is to classify a given Trump Tweet as Real or Fake. 
 
-# The ML Model
-We used a deep 1D convolutional network that predicts the probability of a tweet being real or fake. In this repository, you can easily train this model by following the steps below and quickly build your own state of the art Trump tweet classifer.
-
 ## Data
 A csv file is included in the `code` folder that contains the tweets and it's labels.
 You will need to download the pretrained word-embeddings from the following website:`https://fasttext.cc/docs/en/english-vectors.html`. From this website, download `wiki-news-300d-1M.vec.zip` and unzip it inside the `data' folder. So, the data folder should now have "wiki-news-300d-1M.vec" inside it. 
+
+
+## ML Model
+We used a deep 1D convolutional network that predicts the probability of a tweet being real or fake. In this repository, you can easily train this model by following the steps below and quickly build your own state of the art Trump tweet classifer.
 
 ## Requirements
 With Foundations:
@@ -27,13 +28,13 @@ Without Foundations:
 3) Pip install -r requirements.txt
 
 
-# Why run with Foundations?
+## Why run with Foundations?
 1) Foundations allow you to quickly schedule python jobs to be run on CPUs or GPUs.
 2) It automatically creates the appropriate python envoironment to run the job and discards it once the job is completed.
 3) It allows user to run and track multiple ML experiments. The GUI (running at https://localhost:5555) gives the user a comprehesive view of all the ML experiements at one place.
 
 
-# How to convert any code to run in Founations Atlas?
+## How to convert any code to run in Founations Atlas?
 With only a few lines of code, you can convert your code into Foundations Atlas. For the reference, please see the `try/ except` commands in `main.py` where we have introduced a few lines of foundations code in order to track ML experiments. 
 
 Foundations spin up docker containers inside which the code actually runs. In order to provide the data to this docker container, we need to mount the data/ folder into the docker containers. In order to do so, open the `job.config.yaml` inside code/ directory. Under the `volumes` section, replace the path with your absolute path of the data. 

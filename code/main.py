@@ -55,7 +55,7 @@ def generate_config():
                          'num_dense_neurons': [10,50,80],
                          'activation_func': ['relu', 'elu', 'selu', 'tanh'],
                          'dense_dropout': [0, 0.2, 0.5],
-                         'epochs': [1],
+                         'epochs': [100],
                          'batch_size':[10, 20],
                          'learning_rate': [0.1, 0.01, 0.001, 0.0001, 0.00001]
                          }
