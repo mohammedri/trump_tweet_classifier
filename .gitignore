@@ -1,0 +1,14 @@
+*.ipynb_checkpoints
+*.ipynb
+*.DS_Store
+*.vec
+*.jpg
+*.jpeg
+*.h5
+*.xlsx
+*.ipynb
+__pycache__/
+tflogs/
+input/
+*.npy
+.idea/
