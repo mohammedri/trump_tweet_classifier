@@ -5,7 +5,7 @@
 <hr>
 
 # Fake Vs Real Trump Twitter Classifier Using Tensorflow 2.0
-The task is to classify a given Trump Tweet as Real or Fake. 
+The task is to classify any given Trump Tweet as Real or Fake. 
 
 ## Data
 A csv file is included in the `code` folder that contains the tweets and it's labels.
@@ -16,16 +16,10 @@ You will need to download the pretrained word-embeddings from the following webs
 We used a deep 1D convolutional network that predicts the probability of a tweet being real or fake. In this repository, you can easily train this model by following the steps below and quickly build your own state of the art Trump tweet classifer.
 
 ## Requirements
-With Foundations:
-1) Install docker from https://docs.docker.com/install/ and start the docker service locally on your computer
-2) Install Anaconda (if not already installed)
-3) Install python>=3.6.9 in a new environment
-4) Install Foundations  from https://atlas.dessa.com
-
-Without Foundations:
-1) Install Anaconda (if not already installed)
-2) Install python>=3.6.9 in a new environment
-3) Pip install -r requirements.txt
+1) Install Foundations  from https://atlas.dessa.com
+2) Install docker from https://docs.docker.com/install/ and start the docker service locally on your computer
+3) Install Anaconda (if not already installed)
+4) Install python>=3.6.9 in a new environment
 
 
 ## Why run with Foundations?
@@ -46,8 +40,8 @@ CD into the "code" direcotry in order to run `main.py`. You may run the job with
 | Run Job           | Terminal command                |   Purpose              |   
 |----------------|--------------------------|-----------------------------------|
 |      Without Foundations     | `python main.py`           | To run code normally               |                          
-| Only one job with foundations| foundations submit scheduler . main.py       | To test if your foundations is working properly                 |
-|      Run multiple ML experiments    | python submit_jobs.py                   | To run and track multiple ML experiments                 |
+| Only one job with foundations| foundations submit scheduler . main.py       | To run any python code with foundations                 |
+|      Run multiple ML experiments    | python submit_jobs.py                   | To track multiple experiments and find the best ML model                |
 
 
 ## Baseline Model
