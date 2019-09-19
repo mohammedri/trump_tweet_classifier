@@ -4,37 +4,46 @@
 <br>
 <hr>
 
-# Fake Vs Real Trump Twitter Classifier Using Tensorflow 2.0
-The task is to classify any given Trump Tweet as Real or Fake. 
+# Fake vs. Real Trump Twitter Classifier with Tensorflow 2.0
+The task is to classify a given Trump tweet as real or fake. 
 
 ## Data
-A csv file is included in the `code` folder that contains the tweets and it's labels.
-You will need to download the pretrained word-embeddings from the following website:`https://fasttext.cc/docs/en/english-vectors.html`. From this website, download `wiki-news-300d-1M.vec.zip` and unzip it inside the `data' folder. So, the data folder should now have "wiki-news-300d-1M.vec" inside it. 
+A csv file is included in the `code` folder that contains the tweets and labels.
+You will need to download the pretrained word-embeddings from the following website:`https://fasttext.cc/docs/en/english-vectors.html`. From this website, download `wiki-news-300d-1M.vec.zip` and unzip it inside the `data` folder. The data folder should now have `wiki-news-300d-1M.vec` inside it. 
 
 
-## ML Model
-We used a deep 1D convolutional network that predicts the probability of a tweet being real or fake. In this repository, you can easily train this model by following the steps below and quickly build your own state of the art Trump tweet classifer.
+## The model
+We train a deep 1D convolutional network that predicts the probability of a tweet being real or fake. In this repository, you can easily train this model by following the steps below.
 
 ## Requirements
-1) Install Foundations  from https://atlas.dessa.com
-2) Install docker from https://docs.docker.com/install/ and start the docker service locally on your computer
+1) Install Atlas from https://atlas.dessa.com
+2) Install Docker from https://docs.docker.com/install/ and start the docker service locally on your computer
 3) Install Anaconda (if not already installed)
-4) Install python>=3.6.9 in a new environment
+4) Install `python >= 3.6.9` in a new environment
 
 
-## Why run with Foundations?
-1) Foundations allow you to quickly schedule python jobs to be run on CPUs or GPUs.
-2) It automatically creates the appropriate python envoironment to run the job and discards it once the job is completed.
-3) It allows user to run and track multiple ML experiments. The GUI (running at https://localhost:5555) gives the user a comprehesive view of all the ML experiements at one place.
+## Why Atlas?
+
+With Atlas, we're excited to bring you a machine learning platform 
+which ships with a local scheduler and Python SDK which enables developers 
+to manage hundreds of experiments while ensuring full reproducibility.
+* Atlas allows you to quickly schedule Python code to be run on CPUs or GPUs.
+* Atlas automatically creates the appropriate Python environment to run the job and discards it once the job is completed.
+* Atlas allows the user to run and track many ML experiments. The Atlas GUI 
+(running at https://localhost:5555) gives the user a comprehensive view 
+of all the ML experiments in one place.
 
 
-## How to convert any code to run in Founations Atlas?
-With only a few lines of code, you can convert your code into Foundations Atlas. For the reference, please see the `try/ except` commands in `main.py` where we have introduced a few lines of foundations code in order to track ML experiments. 
+## Converting any code to run in Atlas
+With only a few lines of code, you can convert your code to be Atlas-friendly. For reference, please see the `try/except` commands in `main.py` where we have introduced Atlas code to track ML experiments. 
 
-Foundations spin up docker containers inside which the code actually runs. In order to provide the data to this docker container, we need to mount the data/ folder into the docker containers. In order to do so, open the `job.config.yaml` inside code/ directory. Under the `volumes` section, replace the path with your absolute path of the data. 
+Atlas spins up Docker containers to run the code. 
+In order to provide the data to this Docker container, 
+we need to mount the `data/` folder into the containers. 
+In order to do so, open the `job.config.yaml` inside `code/` directory. Under the `volumes` section, replace the path with the absolute path of the data. 
 
 ## How To Run It
-CD into the "code" direcotry in order to run `main.py`. You may run the job with or without foundations. Please see the following commands to run the code:
+CD into the "code" directory in order to run `main.py`. You may run the job with or without foundations. Please see the following commands to run the code:
 
 
 | Run Job           | Terminal command                |   Purpose              |   
