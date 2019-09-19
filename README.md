@@ -21,7 +21,7 @@ In this repository, you can train this model by following the steps below.
 1) Install Atlas from https://atlas.dessa.com
 2) Install Docker from https://docs.docker.com/install/ and start the docker service locally on your computer
 3) Install Anaconda (if not already installed)
-4) Install `python >= 3.6.9` in a new environment
+4) Install `python >= 3.6.9` and `tensorflow==2.0rc` in a new environment via `requirements.txt`
 
 
 ## Why Atlas?
