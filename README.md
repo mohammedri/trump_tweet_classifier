@@ -75,7 +75,8 @@ Once the job is deployed from the terminal, it can be viewed in the Atlas GUI by
 ![](code/images/submit_jobs_cli.png)
 ![](code/images/multiple_experiments_gui.png)
 
-##Saving artifacts with Atlas
+## Saving artifacts with Atlas
+
 Artifacts are objects such as images, generated audio, confusion matrices, or input distribution statistics
 which need to be tracked for reproducibility. 
 These artifacts are accessible from the GUI.
@@ -100,7 +101,9 @@ Clicking on `Project Overview` will bring up a plot of model metrics for each ex
 
 ![](code/images/metrics_tracking_per_experiment.png)
 
-That's it! Try running some experiments using Atlas and [let us know](https://twitter.com/dessa) if you have feedback, questions or suggestions. Happy experimenting!
+That's it! Try running some experiments using Atlas 
+and [let us know](https://twitter.com/dessa) if you have feedback, 
+questions or suggestions. Happy experimenting!
 
 
 
