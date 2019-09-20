@@ -31,7 +31,7 @@ We used a deep 1D convolutional network that predicts the probability of a tweet
 ## How to convert any code to run in Founations Atlas?
 With only a few lines of code, you can convert your code into Foundations Atlas. For the reference, please see the `try/ except` commands in `main.py` where we have introduced a few lines of foundations code in order to track ML experiments. 
 
-Foundations spin up docker containers inside which the code actually runs. In order to provide the data to this docker container, we need to mount the data/ folder into the docker containers. In order to do so, open the `job.config.yaml` inside code/ directory. Under the `volumes` section, replace the path with your absolute path of the data. 
+Foundations spin up docker containers inside which the code actually runs. In order to provide the data to this docker container, we need to mount the data/ folder into the docker containers. In order to do so, open the `job.config.yaml` inside code/ directory. Under the `volumes` section, replace the path (/Users/sachinrana/workspace/python_codes/trump_tweet_classifier/data/) with your absolute path of the data folder. This will instruct foundations to mount this data folder when you run the job with foundations.
 
 ## How To Run It
 CD into the "code" direcotry in order to run `main.py`. You may run the job with or without foundations. Please see the following commands to run the code:
