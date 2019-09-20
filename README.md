@@ -4,89 +4,106 @@
 <br>
 <hr>
 
-# Fake Vs Real Trump Twitter Classifier Using Tensorflow 2.0
-The task is to classify any given Trump Tweet as Real or Fake. 
+# Fake vs. Real Trump Twitter Classifier with Tensorflow 2.0
+The task is to classify a given Trump tweet as real or fake. 
 
 ## Data
-A csv file is included in the `code` folder that contains the tweets and it's labels.
-You will need to download the pretrained word-embeddings from the following website:`https://fasttext.cc/docs/en/english-vectors.html`. From this website, download `wiki-news-300d-1M.vec.zip` and unzip it inside the `data' folder. So, the data folder should now have "wiki-news-300d-1M.vec" inside it. 
+A csv file is included in the `code` folder which contains the tweets and labels.
+You will need to download the pretrained word-embeddings from [here](https://fasttext.cc/docs/en/english-vectors.html). 
+Download `wiki-news-300d-1M.vec.zip` and unzip it inside the `data` folder. The data folder should now have `wiki-news-300d-1M.vec` inside it. 
 
 
-## ML Model
-We used a deep 1D convolutional network that predicts the probability of a tweet being real or fake. In this repository, you can easily train this model by following the steps below and quickly build your own state of the art Trump tweet classifer.
+## The model
+We train a deep 1D convolutional neural network that predicts the probability of a tweet being real or fake. 
+In this repository, you can train this model by following the steps below.
 
 ## Requirements
-1) Install Foundations  from https://atlas.dessa.com
-2) Install docker from https://docs.docker.com/install/ and start the docker service locally on your computer
+1) Install Atlas from https://atlas.dessa.com
+2) Install Docker from https://docs.docker.com/install/ and start the docker service locally on your computer
 3) Install Anaconda (if not already installed)
-4) Install python>=3.6.9 in a new environment
+4) Install `python >= 3.6.9` and `tensorflow==2.0rc` in a new environment via `requirements.txt`
 
 
-## Why run with Foundations?
-1) Foundations allow you to quickly schedule python jobs to be run on CPUs or GPUs.
-2) It automatically creates the appropriate python envoironment to run the job and discards it once the job is completed.
-3) It allows user to run and track multiple ML experiments. The GUI (running at https://localhost:5555) gives the user a comprehesive view of all the ML experiements at one place.
+## Why Atlas?
+
+With Atlas, we're excited to bring you a machine learning platform 
+shipping with a local scheduler and Python SDK which enables developers 
+to manage hundreds of experiments while ensuring full reproducibility.
+* Atlas allows you to quickly schedule Python code to be run on CPUs or GPUs.
+* Atlas automatically creates the Python environment to run the job and discards it once the job is completed.
+* Atlas allows the user to run and track many ML experiments. The Atlas GUI 
+(running at https://localhost:5555) gives the user a comprehensive view 
+of all the ML experiments in one place.
 
 
-## How to convert any code to run in Founations Atlas?
-With only a few lines of code, you can convert your code into Foundations Atlas. For the reference, please see the `try/ except` commands in `main.py` where we have introduced a few lines of foundations code in order to track ML experiments. 
+## Converting any code to run in Atlas
+With only a few lines of code, you can convert your code to be Atlas-friendly. For reference, please see the `try/except` commands in `main.py` where we have introduced Atlas code to track ML experiments. 
 
-Foundations spin up docker containers inside which the code actually runs. In order to provide the data to this docker container, we need to mount the data/ folder into the docker containers. In order to do so, open the `job.config.yaml` inside code/ directory. Under the `volumes` section, replace the path (/Users/sachinrana/workspace/python_codes/trump_tweet_classifier/data/) with your absolute path of the data folder. This will instruct foundations to mount this data folder when you run the job with foundations.
+Atlas spins up Docker containers to run the code. 
+In order to provide the data to this Docker container, 
+we need to mount the `data/` folder into the containers. 
+In order to do so, open the `job.config.yaml` inside `code/` directory. Under the `volumes` section, replace the path (/Users/sachinrana/workspace/python_codes/trump_tweet_classifier/data/) with the absolute path of the data folder. By doing so, we are telling foundations to mount this data/ folder inside the docker container from which the code will read the required files. 
 
-## How To Run It
-CD into the "code" direcotry in order to run `main.py`. You may run the job with or without foundations. Please see the following commands to run the code:
+## Running the code 
+`cd` into the `code` directory in order to run `main.py`. You may run the job with or without Atlas. Use these commands to run the code.
 
 
 | Run Job           | Terminal command                |   Purpose              |   
 |----------------|--------------------------|-----------------------------------|
-|      Without Foundations     | `python main.py`           | To run code normally               |                          
-| Only one job with foundations| foundations submit scheduler . main.py       | To run any python code with foundations                 |
-|      Run multiple ML experiments    | python submit_jobs.py                   | To track multiple experiments and find the best ML model                |
+|      Without Atlas     | `python main.py`           | To run code normally               |                          
+| Only one job with Atlas | foundations submit scheduler . main.py       | To run any python code with foundations                 |
+|      Run multiple ML experiments with Atlas    | python submit_jobs.py                   | To track multiple experiments and find the best ML model                |
 
 
-## Baseline Model
-Around line 68 in `main.py`, we have included a flag `USE_BASELINE_PARAMS = False` so that you can run experiments with random hyperparameters. But, in case you want to run the baseline model, just set this flag to be `True`.
+## Baseline model
+Around line 68 in `main.py`, we have included a flag `USE_BASELINE_PARAMS = False` 
+so you can run experiments with random hyperparameters. To run just the baseline model, set this flag to be `True`.
 
-The baseline validation accuracy is approx. 75%. But, with some ML experiments, this baseline accuracy can be further improved.
+The baseline validation accuracy is ~75%. With some experimentation, this accuracy can be improved.
 
-
-Below are some screenshots of running ML experiments with foundations.
+Below are some screenshots of running ML experiments with Atlas.
 
 ##Run a single job with foundations
 ![](code/images/single_deploy_cli.png)
 
-Once the job is deployed from the terminal, it can be viewed in Foundations GUI by going to internet browser - https://localhost:5555.
+Once the job is deployed from the terminal, it can be viewed in the Atlas GUI by going to your internet browser at https://localhost:5555.
 
 ![](code/images/single_job_running_gui.png)
 
 
-##Launch multiple ML experiments with foundations
+##Launch multiple experiments with Atlas
 ![](code/images/submit_jobs_cli.png)
 ![](code/images/multiple_experiments_gui.png)
 
-##Foundations Artifacts
-The artifacts lets you save any object you want to track along with the ML experiments. These artifacts are also accessible from the GUI.
-In the GUI, you can see multiple experiments that have finished running along with their performance. In order to view the performance plots, click on the square box at the end of a corresponding row. You should see an artifacts window opening up where you can see the performance_plots.png and saved_model.h5.
+## Saving artifacts with Atlas
 
-Artifacts can also save the trained model that can be used for production or further analysis. In the artifact viewer, you can see `saved_model.h5`, you can download this trained model onto your computer.
+Artifacts are objects such as images, generated audio, confusion matrices, or input distribution statistics
+which need to be tracked for reproducibility. 
+These artifacts are accessible from the GUI.
+
+The GUI shows the run status of each experiment, along with their performance. 
+In order to view the performance plots, click on the square box at the end of a row. 
+You should see the Artifacts window pop up, where you can see the `performance_plots.png` and `saved_model.h5`.
+
+Artifacts can be used to save the trained model to be used for production or further analysis. 
+From the artifact viewer, you can download the trained model file, `saved_model.h5`
 
 ![](code/images/artifacts_viewer.png)
 
-In order to see the performance plots while training of model, click on `performance_plots.png`:
+To see the performance plots while training a model, click on `performance_plots.png`.
 
 ![](code/images/view_artifact_1.png)
 ![](code/images/view_artifact_2.png)
 
 
 
-If you click on `Project Overview`, you will see a plot of model metrics for each ML experiment that was run using Foundations.
+Clicking on `Project Overview` will bring up a plot of model metrics for each experiment that was run using Atlas.
 
 ![](code/images/metrics_tracking_per_experiment.png)
 
-So, try running some experiments using Foundations and let us know if you have any feedback, questions or suggestions. We would like users to take advantage of Foundations and significantly improve the baseline model performance.
-
-
-
+That's it! Try running some experiments using Atlas 
+and [let us know](https://twitter.com/dessa) if you have feedback, 
+questions or suggestions. Happy experimenting!
 
 
 
